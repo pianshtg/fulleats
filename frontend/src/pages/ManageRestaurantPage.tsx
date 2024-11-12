@@ -9,12 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ManageRestaurantForm from "@/forms/manage-restaurant-form/ManageRestaurantForm";
 
 const ManageRestaurantPage = () => {
-  const { createRestaurant, isLoading: isCreateLoading } =
-    useCreateMyRestaurant();
-
-  const { restaurant } = useGetMyRestaurant();
-
+  const { createRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
   const { updateRestaurant, isLoading: isUpdateLoading } = useUpdateMyRestaurant();
+    
+  const { restaurant } = useGetMyRestaurant();
 
   const { orders } = useGetMyRestaurantOrders();
 
