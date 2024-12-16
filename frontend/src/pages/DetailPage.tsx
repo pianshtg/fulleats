@@ -95,7 +95,7 @@ const DetailPage = () => {
         name: cartItem.name,
         quantity: cartItem.quantity.toString(),
       })),
-      restaurantId: restaurant._id,
+      restaurantId: restaurant.id,
       deliveryDetails: {
         name: userFormData.name,
         addressLine1: userFormData.addressLine1,

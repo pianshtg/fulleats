@@ -8,7 +8,7 @@ export type User = {
 };
 
 export type Restaurant = {
-    _id: string;
+    id: string;
     user: string;
     restaurantName: string;
     city: string;

@@ -18,7 +18,7 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
       0
     );
 
-    const totalWithDelivery = totalInRupiah + restaurant.deliveryPrice;
+    const totalWithDelivery = Number(totalInRupiah) + Number(restaurant.deliveryPrice);
 
     return totalWithDelivery;
   };
