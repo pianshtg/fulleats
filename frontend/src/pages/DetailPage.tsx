@@ -33,7 +33,7 @@ const DetailPage = () => {
     setCartItems((prevCartItems) => {
       // 1. checking if the item is already in the cart
       const existingCartItem = prevCartItems.find(
-        (cartItem) => cartItem._id === menuItem._id
+        (cartItem) => cartItem.name === menuItem.name
       );
 
       let updatedCartItems;
@@ -41,7 +41,7 @@ const DetailPage = () => {
       // 2. if item is in cart, updating the quantity
       if (existingCartItem) {
         updatedCartItems = prevCartItems.map((cartItem) =>
-          cartItem._id === menuItem._id
+          cartItem.name === menuItem.name
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
@@ -70,7 +70,7 @@ const DetailPage = () => {
   function removeFromCart (cartItem: CartItem) {
     setCartItems((prevCartItems) => {
       const updatedCartItems = prevCartItems.filter(
-        (item) => cartItem._id !== item._id
+        (item) => cartItem.name !== item.name
       );
 
       sessionStorage.setItem(
