@@ -4,6 +4,7 @@ import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
 import { Trash } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = {
   restaurant: Restaurant;
@@ -28,7 +29,7 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
       <CardHeader>
         <CardTitle className="text-2xl font-bold tracking-tight flex justify-between">
           <span>Your Order</span>
-          <span>Rp. {getTotalCost()}</span>
+          <span>Rp. {formatCurrency(getTotalCost())}</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
@@ -47,14 +48,14 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
                 size={20}
                 onClick={() => removeFromCart(item)}
               />
-              Rp. {item.price * item.quantity}
+              Rp. {formatCurrency(item.price * item.quantity)}
             </span>
           </div>
         ))}
         <Separator />
         <div className="flex justify-between">
           <span>Delivery</span>
-          <span>Rp. {restaurant.deliveryPrice}</span>
+          <span>Rp. {formatCurrency(restaurant.deliveryPrice)}</span>
         </div>
         <Separator />
       </CardContent>

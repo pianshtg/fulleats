@@ -1,5 +1,6 @@
 import { Order } from "@/types";
 import { Separator } from "./ui/separator";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = {
   order: Order;
@@ -28,7 +29,7 @@ const OrderStatusDetail = ({ order }: Props) => {
       <Separator />
       <div className="flex flex-col">
         <span className="font-bold">Total</span>
-        <span>Rp. {order.totalAmount}</span>
+        <span>Rp. {formatCurrency(order.totalAmount)}</span>
       </div>
     </div>
   );

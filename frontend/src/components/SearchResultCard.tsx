@@ -2,6 +2,7 @@ import { Restaurant } from "@/types";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Banknote, Clock, Dot } from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = {
   restaurant: Restaurant;
@@ -39,7 +40,7 @@ const SearchResultCard = ({ restaurant }: Props) => {
             </div>
             <div className="flex items-center gap-1">
               <Banknote />
-              Delivery from Rp. {restaurant.deliveryPrice}
+              Delivery from Rp. {formatCurrency(restaurant.deliveryPrice)}
             </div>
           </div>
         </div>
