@@ -21,8 +21,7 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-  const { createCheckoutSession, isLoading: isCheckoutLoading } =
-    useCreateCheckoutSession();
+  const { createCheckoutSession, isLoading: isCheckoutLoading } = useCreateCheckoutSession();
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -95,7 +94,7 @@ const DetailPage = () => {
         name: cartItem.name,
         quantity: cartItem.quantity.toString(),
       })),
-      restaurantId: restaurant.id,
+      restaurantId: restaurantId!,
       deliveryDetails: {
         name: userFormData.name,
         addressLine1: userFormData.addressLine1,
@@ -105,8 +104,7 @@ const DetailPage = () => {
       },
     };
 
-    const data = await createCheckoutSession(checkoutData);
-    window.location.href = data.url;
+    await createCheckoutSession(checkoutData);
   };
 
   if (isLoading || !restaurant) {

@@ -4,7 +4,7 @@ import OrderStatusHeader from "@/components/OrderStatusHeader";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const OrderStatusPage = () => {
-  const { orders, isLoading } = useGetMyOrders();
+  const { orders, isLoading } = useGetMyOrders()
 
   if (isLoading) {
     return "Loading...";

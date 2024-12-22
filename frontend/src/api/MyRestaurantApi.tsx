@@ -80,13 +80,14 @@ export function useUpdateMyRestaurant () {
   ): Promise<Restaurant> => {
     const accessToken = await getAccessTokenSilently();
 
-    const response = await fetch(`${API_BASE_URL}/api/my/restaurant`, {
-      method: "PUT",
+    const response = await fetch(`${API_BASE_URL}/api/my/restaurant/update`, {
+      method: "POST",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`
       },
       body: restaurantFormData,
     });
+    console.log(restaurantFormData) //Debug.
 
     if (!response) {
       throw new Error("Failed to update restaurant");
@@ -100,10 +101,11 @@ export function useUpdateMyRestaurant () {
     isLoading,
     error,
     isSuccess,
-  } = useMutation(updateRestaurantRequest);
+  } = useMutation(updateRestaurantRequest)
 
   if (isSuccess) {
-    toast.success("Restaurant updated");
+    toast.success("Restaurant updated")
+    window.location.href = '/manage-restaurant'
   }
 
   if (error) {
@@ -122,7 +124,6 @@ export function useGetMyRestaurantOrders () {
     const response = await fetch(`${API_BASE_URL}/api/my/restaurant/order`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
       },
     });
 
@@ -130,12 +131,24 @@ export function useGetMyRestaurantOrders () {
       throw new Error("Failed to fetch orders");
     }
 
-    return response.json();
+    // Parse the JSON response
+    const orders = await response.json();
+
+    // Convert the `restaurant` field to JSON object if it's a string
+    return orders.map((order: Order) => {
+      if (typeof order.restaurant === "string") {
+        order.restaurant = JSON.parse(order.restaurant);
+      }
+      console.log(order) //Debug.
+      return order;
+    });
+    
   };
 
   const { data: orders, isLoading } = useQuery(
     "fetchMyRestaurantOrders",
-    getMyRestaurantOrdersRequest
+    getMyRestaurantOrdersRequest,
+    {retry: false}
   );
 
   return { orders, isLoading };

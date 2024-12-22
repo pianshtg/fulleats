@@ -13,7 +13,7 @@ import {
 import { ORDER_STATUS } from "@/config/order-status-config";
 import { useUpdateMyRestaurantOrder } from "@/api/MyRestaurantApi";
 import { useEffect, useState } from "react";
-import { formatCurrency } from "@/lib/utils";
+import { calculateTotalAmount, formatCurrency } from "@/lib/utils";
 
 type Props = {
   order: Order;
@@ -30,14 +30,14 @@ const OrderItemCard = ({ order }: Props) => {
 
   async function handleStatusChange (newStatus: OrderStatus) {
     await updateMyRestaurantStatus({
-      orderId: order._id as string,
+      orderId: order.id as string,
       status: newStatus,
     });
     setStatus(newStatus);
   };
 
   function getTime () {
-    const orderDateTime = new Date(order.createdAt);
+    const orderDateTime = new Date(order.created_at);
 
     const hours = orderDateTime.getHours();
     const minutes = orderDateTime.getMinutes();
@@ -68,7 +68,7 @@ const OrderItemCard = ({ order }: Props) => {
           </div>
           <div>
             Total Cost:
-            <span className="ml-2 font-normal">Rp. {formatCurrency(order.totalAmount)}</span>
+            <span className="ml-2 font-normal">Rp. {formatCurrency(calculateTotalAmount(order))}</span>
           </div>
         </CardTitle>
         <Separator />

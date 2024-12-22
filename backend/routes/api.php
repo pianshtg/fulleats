@@ -22,7 +22,7 @@ Route::prefix('my')->group(function () {
             Route::get('/order', [MyRestaurantController::class, 'getMyRestaurantOrders']);
             Route::patch('/order/{orderId}/status', [MyRestaurantController::class, 'updateOrderStatus']);
             Route::post('/', [MyRestaurantController::class, 'createMyRestaurant']);
-            Route::put('/', [MyRestaurantController::class, 'updateMyRestaurant']);
+            Route::post('/update', [MyRestaurantController::class, 'updateMyRestaurant']);
         });
     
         Route::prefix('user')->group(function () {
@@ -40,7 +40,6 @@ Route::prefix('order')->group(function () {
         Route::get('/', [OrderController::class, 'getMyOrders']);
         Route::post('/checkout/create-checkout-session', [OrderController::class, 'createCheckoutSession']);
     });
-    Route::post('/checkout/webhook', [OrderController::class, 'stripeWebhookHandler']);
 });
 
 // Routes for "restaurant" namespace

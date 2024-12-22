@@ -8,7 +8,7 @@ export type User = {
 };
 
 export type Restaurant = {
-    id: string;
+    _id: string;
     user: string;
     restaurantName: string;
     city: string;
@@ -30,7 +30,7 @@ price: number;
 export type OrderStatus = "placed" | "paid" | "inProgress" | "outForDelivery" | "delivered"
 
 export type Order = {
-    _id: string
+    id: string
     restaurant: Restaurant
     user: User
     cartItems: {
@@ -47,7 +47,7 @@ export type Order = {
     }
     totalAmount: number
     status: OrderStatus
-    createdAt: string
+    created_at: string
     restaurantId: string
 }
 

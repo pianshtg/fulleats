@@ -1,14 +1,15 @@
 import { Order } from "@/types";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export function useGetMyOrders () {
+export function useGetMyOrders() {
   const { getAccessTokenSilently } = useAuth0();
 
-  async function getMyOrdersRequest (): Promise<Order[]> {
+  async function getMyOrdersRequest(): Promise<Order[]> {
     const accessToken = await getAccessTokenSilently();
 
     const response = await fetch(`${API_BASE_URL}/api/order`, {
@@ -21,8 +22,18 @@ export function useGetMyOrders () {
       throw new Error("Failed to get orders");
     }
 
-    return response.json();
-  };
+    // Parse the JSON response
+    const orders = await response.json();
+
+    // Convert the `restaurant` field to JSON object if it's a string
+    return orders.map((order: Order) => {
+      if (typeof order.restaurant === "string") {
+        order.restaurant = JSON.parse(order.restaurant);
+      }
+      // console.log(order) //Debug.
+      return order;
+    });
+  }
 
   const { data: orders, isLoading } = useQuery(
     "fetchMyOrders",
@@ -31,7 +42,7 @@ export function useGetMyOrders () {
   );
 
   return { orders, isLoading };
-};
+}
 
 type CheckoutSessionRequest = {
   cartItems: {
@@ -50,6 +61,7 @@ type CheckoutSessionRequest = {
 
 export function useCreateCheckoutSession () {
   const { getAccessTokenSilently } = useAuth0();
+  const navigate = useNavigate()
 
   async function createCheckoutSessionRequest (
     checkoutSessionRequest: CheckoutSessionRequest
@@ -69,15 +81,17 @@ export function useCreateCheckoutSession () {
     );
 
     if (!response.ok) {
+      // const data = await response.json()
+      // console.log(data.message);
       throw new Error("Unable to create checkout session");
     }
-
     return response.json();
   };
 
   const {
     mutateAsync: createCheckoutSession,
     isLoading,
+    isSuccess,
     error,
     reset,
   } = useMutation(createCheckoutSessionRequest);
@@ -85,6 +99,10 @@ export function useCreateCheckoutSession () {
   if (error) {
     toast.error(error.toString());
     reset();
+  }
+  
+  if (isSuccess) {
+    navigate('/order-status')
   }
 
   return { createCheckoutSession, isLoading };

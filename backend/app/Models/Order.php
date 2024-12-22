@@ -10,32 +10,16 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'restaurant',
         'user',
-        'email',
-        'name',
-        'addressLine1',
-        'city',
-        'total_amount',
+        'restaurant',
+        'deliveryDetails',
+        'cartItems',
         'status',
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+        'user' => 'string',
+        'restaurant' => 'string',
+        'createdAt' => 'datetime',
     ];
-
-    public function restaurant()
-    {
-        return $this->belongsTo(Restaurant::class);
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function cartItems()
-    {
-        return $this->hasMany(CartItem::class);
-    }
 }
