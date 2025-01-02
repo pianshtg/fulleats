@@ -16,8 +16,6 @@ class AppServiceProvider extends ServiceProvider
     {
         parent::boot();
         $this->app['router']->aliasMiddleware('auth.jwt', AuthMiddleware::class);
-        $this->app['router']->aliasMiddleware('jwt.check', JwtCheck::class);
-        $this->app['router']->aliasMiddleware('jwt.parse', JwtParse::class);
     }
 
     public function map()

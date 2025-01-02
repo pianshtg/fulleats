@@ -5,16 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 use App\Models\Order;
-use Illuminate\Support\Facades\Auth;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Illuminate\Support\Str;
 
-class MyRestaurantController extends Controller
+class MyRestaurantController
 {
     public function createMyRestaurant(Request $request)
     {
         try {
-            $userId = $request->userId; // Get authenticated user's ID
+            $userId = $request->userId;
             $userId = explode('|', $userId)[1];
             $existingRestaurant = Restaurant::where('user', $userId)->first();
 
@@ -22,12 +19,9 @@ class MyRestaurantController extends Controller
                 return response()->json(['message' => 'User restaurant already exists'], 409);
             }
 
-            // Handle the uploaded image
-            // $imageUrl = $this->uploadImage($request->file('imageFile'));
             $imageUrl = cloudinary()->upload($request->file('imageFile')->getRealPath())->getSecurePath();
-            // $imageUrl = 'https://res.cloudinary.com/ddhzxw6j8/image/upload/v1734267784/Mitra_Telkom_Property/Mitra%20Company%20One/Nomor_Kontrak_%5B1%5D/Nama_Pekerjaan_%5Bpekerjaan_1%5D/2024-12-15/E/gxzdbhesaphsxxeyglde.jpg';
 
-            // Create a new restaurant
+            // Create new restaurant
             $restaurant = new Restaurant($request->all());
             $restaurant->imageUrl = $imageUrl;
             $restaurant->user = $userId;

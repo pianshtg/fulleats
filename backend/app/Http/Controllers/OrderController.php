@@ -5,12 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Restaurant;
-use MongoDB\Laravel\Eloquent\Casts\ObjectId;
-use Stripe\StripeClient;
-use Stripe\Exception\SignatureVerificationException;
-use Illuminate\Support\Facades\Auth;
 
-class OrderController extends Controller
+class OrderController
 {
     private $stripe;
     private $frontendUrl;
@@ -61,18 +57,16 @@ class OrderController extends Controller
 
             $userId = explode('|', $request->userId)[1];
 
-            // Create a new order and save it to the database
             $order = new Order([
                 'user' => $userId,
                 'restaurant' => (string) $restaurant->_id,
-                'status' => 'placed', // Default status
+                'status' => 'placed', 
                 'deliveryDetails' => $checkoutSessionRequest['deliveryDetails'],
                 'cartItems' => $checkoutSessionRequest['cartItems'],
                 'createdAt' => now(),
             ]);
             $order->save();
 
-            // Return the order ID to the frontend for confirmation
             return response()->json([
                 'order' => $order,
                 'message' => 'Order created successfully',
@@ -82,32 +76,6 @@ class OrderController extends Controller
             logger()->error($error);
             return response()->json(['message' => $error->getMessage()], 500);
         }
-    }
-    
-    private function createLineItems(array $cartItems, array $menuItems)
-    {
-        $lineItems = [];
-
-        foreach ($cartItems as $cartItem) {
-            $menuItem = collect($menuItems)->firstWhere('id', $cartItem['menuItemId']);
-
-            if (!$menuItem) {
-                throw new \Exception("Menu item not found: {$cartItem['menuItemId']}");
-            }
-
-            $lineItems[] = [
-                'price_data' => [
-                    'currency' => 'gbp',
-                    'unit_amount' => $menuItem['price'] * 100, // Convert to cents
-                    'product_data' => [
-                        'name' => $menuItem['name'],
-                    ],
-                ],
-                'quantity' => (int) $cartItem['quantity'],
-            ];
-        }
-
-        return $lineItems;
     }
     
 }

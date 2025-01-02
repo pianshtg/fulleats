@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Restaurant;
 
-class RestaurantController extends Controller
+class RestaurantController
 {
     public function getRestaurant($restaurantId)
     {

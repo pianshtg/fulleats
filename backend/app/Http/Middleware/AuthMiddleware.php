@@ -19,7 +19,7 @@ class AuthMiddleware
         }
 
         try {
-            // Configure the Auth0 SDK
+
             $config = new SdkConfiguration(
                 strategy: SdkConfiguration::STRATEGY_API,
                 domain: config('auth0.domain'),
@@ -28,19 +28,15 @@ class AuthMiddleware
 
             $auth0 = new Auth0($config);
 
-            // Decode and verify the token
             $decoded = $auth0->decode($token);
 
-            // Extract claims from the decoded token
-            $claims = $decoded->toArray(); // Convert the token to an array
-            logger()->info('Token Decoded Claims:', ['claims' => $claims]);
-            $sub = $claims['sub'] ?? null; // Extract the `sub` (subject) claim
+            $claims = $decoded->toArray();
+            $sub = $claims['sub'] ?? null;
 
             if (!$sub) {
                 return response()->json(['message' => 'Unauthorized: Missing subject in token'], 401);
             }
 
-            // Attach the userId (sub) to the request
             $request->merge(['userId' => $sub]);
 
             return $next($request);

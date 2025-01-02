@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 
-class MyUserController extends Controller
+class MyUserController
 {
     public function createCurrentUser(Request $request)
     {
